@@ -258,6 +258,42 @@ def create_order(show_id, session_id, seat_plan_id, price: int, qty: int, delive
                 ]
             }
         }
+    elif deliver_method == 'ID_CARD':
+        data = {
+            "priceItemParam": [
+                {
+                    "applyTickets": [],
+                    "priceItemName": "票款总额",
+                    "priceItemVal": price * qty,
+                    "priceItemType": "TICKET_FEE",
+                    "priceItemSpecies": "SEAT_PLAN",
+                    "direction": "INCREASE",
+                    "priceDisplay": "￥" + str(price * qty)
+                }
+            ],
+            "items": [
+                {
+                    "skus": [
+                        {
+                            "seatPlanId": seat_plan_id,
+                            "sessionId": session_id,
+                            "showId": show_id,
+                            "skuId": seat_plan_id,
+                            "skuType": "SINGLE",
+                            "ticketPrice": price,
+                            "qty": qty,
+                            "deliverMethod": deliver_method
+                        }
+                    ],
+                    "spu": {
+                        "id": show_id,
+                        "spuType": "SINGLE"
+                    }
+                }
+            ],
+            "many2OneAudience": {},
+            "one2oneAudiences": [{"audienceId": i, "sessionId": session_id} for i in audience_ids]
+        }
     elif deliver_method == "VENUE":
         data = {
             "priceItemParam": [
@@ -329,6 +365,8 @@ def create_order(show_id, session_id, seat_plan_id, price: int, qty: int, delive
         }
     else:
         raise Exception("不支持的deliver_method:" + str(deliver_method))
+
+    print(data)
 
     url = "https://m.piaoxingqiu.com/cyy_gatewayapi/trade/buyer/order/v3/create_order"
     response = requests.post(url=url, headers=headers, json=data).json()
