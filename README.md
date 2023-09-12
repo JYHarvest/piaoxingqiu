@@ -1,18 +1,23 @@
 # 票星球自动抢票
 
-1.配置config.py
+1.安装python3
 
-2.安装request
+2.配置config.py
 
-3.运行main.py
-
-# 执行脚本
-## windows
+3.安装request
 ```shell
-python .\main.py 1 1
+pip3 install requests
 ```
-## mac
+
+4.运行main.py
+
 > 参数1：表示谁，参数2：表示场次（从1开始），参数3：表示票价次序（按照票价从低到高，从1开始）
+
+4.1 Windows
+```shell
+python .\main.py xzq 1 1
+```
+4.2 Mac
 ```shell
   python3 main.py xzq 1 1
 ```
